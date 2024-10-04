@@ -1,0 +1,395 @@
+body,
+html,
+#root,
+.App {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  color: white;
+  background-color: black;
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.top-menu {
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  width: 50px;
+  height: 50px;
+  background-color: white;
+}
+
+.top-menu h1,
+.top-menu h2 {
+  margin: 0;
+  padding: 0;
+}
+
+.top-menu h1 {
+  font-size: 1.2em;
+}
+
+.top-menu h2 {
+  font-size: 1em;
+  font-weight: normal;
+}
+
+.top-menu nav ul {
+  list-style-type: none;
+  padding: 0;
+  display: flex;
+}
+
+.top-menu nav li {
+  margin: 0 10px;
+}
+
+.top-menu nav a {
+  color: white;
+  text-decoration: none;
+}
+
+.content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+}
+
+.future-page {
+  display: flex;
+  height: calc(100vh - 70px);
+  flex-direction: row-reverse;
+  position: relative;
+  z-index: 1;
+}
+
+.sidebar {
+  width: 250px;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  position: fixed;
+  top: 70px;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  transition: transform 0.3s ease-in-out;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(136, 136, 136, 0.5) rgba(241, 241, 241, 0.1);
+}
+
+.sidebar.closed {
+  transform: translateX(-250px);
+}
+
+.sidebar-toggle {
+  position: absolute;
+  top: 10px;
+  right: -30px;
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
+  z-index: 1001;
+}
+
+.sidebar-open .bottom-bar {
+  left: 250px;
+}
+
+.sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+  background: rgba(241, 241, 241, 0.1);
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+  background: rgba(136, 136, 136, 0.5);
+  border-radius: 3px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(85, 85, 85, 0.5);
+}
+
+.charts-container {
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.charts-container>div {
+  margin-bottom: 20px;
+}
+
+.main-content {
+  flex-grow: 1;
+  margin-left: 250px;
+  display: flex;
+  flex-direction: column;
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.main-content.sidebar-open {
+  margin-left: 250px;
+}
+
+.sidebar.closed+.main-content {
+  margin-left: 0;
+}
+
+.globe-container {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: none;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 250px;
+  right: 0;
+  height: 170px;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 5px 10px;
+  overflow-x: auto;
+  transition: left 0.3s ease-in-out;
+  transition: left 0.3s;
+}
+
+.space-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('//unpkg.com/three-globe/example/img/night-sky.png');
+  background-size: cover;
+  background-position: center;
+  z-index: -1;
+}
+
+.sidebar.closed~.bottom-bar {
+  left: 0;
+}
+
+.lever-container {
+  display: flex;
+  justify-content: space-around;
+  width: 90%;
+}
+
+.category-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.category-group h3 {
+  font-size: 12px;
+  margin-bottom: 5px;
+}
+
+.levers-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.lever-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 5px;
+  font-size: 10px !important;
+}
+
+.lever-icon {
+  font-size: 14px !important;
+  color: white !important;
+  margin-bottom: 2px;
+}
+
+.lever-container {
+  position: relative;
+  height: 70px;
+  width: 20px;
+  margin: 0 10px;
+}
+
+.lever {
+  -webkit-appearance: none;
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity .2s;
+  margin: 0;
+  writing-mode: bt-lr;
+  -webkit-appearance: slider-vertical;
+}
+
+.lever:hover {
+  opacity: 1;
+}
+
+.lever::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  background: black;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.lever::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  background: black;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.lever-marks {
+  position: absolute;
+  top: 0;
+  left: 45%;
+  transform: translateX(-50%);
+  height: 100%;
+  width: 0px;
+  background-color: #d3d3d3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.lever-mark {
+  width: 10px;
+  height: 2px;
+  background-color: #d3d3d36d;
+  transform: translateX(-4px);
+}
+
+.lever-value {
+  font-size: 10px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.button-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 10px;
+}
+
+.results-button,
+.reset-button {
+  padding: 8px 15px;
+  margin: 3px;
+  font-size: 14px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.results-button {
+  background-color: rgba(105, 105, 105, 0.625);
+}
+
+.results-button:hover {
+  background-color: rgb(105, 105, 105)
+}
+
+.reset-button {
+  background-color: rgba(105, 105, 105, 0.625);
+}
+
+.reset-button:hover {
+  background-color: rgb(105, 105, 105);
+}
+
+/* Novos estilos para a página Atualidade */
+.filter-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  margin: 0 10px;
+}
+
+.filter-group svg {
+  margin-right: 5px;
+}
+
+.filter-inputs {
+  display: flex;
+  align-items: center;
+}
+
+.filter-inputs input {
+  width: 60px;
+  margin: 0 5px;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 5px;
+}
+
+.filter-group select {
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 5px;
+}
+
+.notification-buffer {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.notification {
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
