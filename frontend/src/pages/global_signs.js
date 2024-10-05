@@ -3,7 +3,7 @@ import Globe from 'react-globe.gl';
 import AtualidadeSidebar from '../components/AtualidadeSidebar';
 import ColorLegend from '../components/ColorLegend';
 import * as d3 from 'd3';
-import './Atualidade.css'; // Importando o novo arquivo CSS
+import './global_signs.css'; 
 
 const Atualidade = () => {
     const [globeData, setGlobeData] = useState(null);

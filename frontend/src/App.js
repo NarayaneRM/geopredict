@@ -1,9 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
-import Atualidade from './pages/Atualidade';
-import Futuro from './pages/Futuro';
-import Mudancas from './pages/Mudancas';
-import Analise from './pages/Analise';
+import GlobalSigns from './pages/global_signs';
+import Prediction from './pages/prediction';
+import BrazilSigns from './pages/brazil_signs';
 import './App.css';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -22,21 +21,19 @@ function App() {
             </div>
             <nav>
               <ul>
-                <li><Link to="/">Global signs</Link></li>
-                <li><Link to="/futuro">Brazil signs</Link></li>
-                <li><Link to="/mudancas">Calculator</Link></li>
-                <li><Link to="/analise">EDUCATION</Link></li>
-                <li><Link to="/about">ABOUT</Link></li>
+                <li><Link to="/">Brazil signs</Link></li>
+                <li><Link to="/global_signs">Global signs</Link></li>
+                <li><Link to="/prediction">Education</Link></li>
+                <li><Link to="/about">About</Link></li>
               </ul>
             </nav>
           </header>
 
           <main className="content">
             <Routes>
-              <Route path="/" element={<Atualidade />} />
-              <Route path="/futuro" element={<Futuro />} />
-              <Route path="/mudancas" element={<Mudancas />} />
-              <Route path="/analise" element={<Analise />} />
+              <Route path="/global_signs" element={<GlobalSigns />} />
+              <Route path="/prediction" element={<Prediction />} />
+              <Route path="/" element={<BrazilSigns />} />
             </Routes>
           </main>
 
