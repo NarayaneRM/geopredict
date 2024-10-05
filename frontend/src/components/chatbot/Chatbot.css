@@ -1,0 +1,62 @@
+.robot-container {
+  position: fixed;
+  bottom: 20px;
+  right: 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 10;
+  max-width: 220px;
+  width: 18vw;
+}
+
+.speech-bubble-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 10px;
+  max-width: 100%;
+}
+
+#read-aloud-button {
+  background-color: transparent;
+  border: none;
+  color: #4caf50;
+  font-size: 14px;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+#read-aloud-button:hover {
+  color: #ffffff;
+}
+
+.speech-bubble {
+  position: relative;
+  background: #2a2a2a;
+  color: #e0e0e0;
+  border-radius: 15px;
+  padding: 12px;
+  font-size: 14px;
+  width: 100%;
+  max-width: 280px;
+  border: 2px solid #4caf50;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  text-align: left;
+  transition: all 0.5s ease;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+@media (max-width: 600px) {
+  .speech-bubble {
+    max-width: 85%;
+    font-size: 13px;
+  }
+
+  #read-aloud-button {
+    font-size: 12px;
+  }
+}
