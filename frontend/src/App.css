@@ -21,54 +21,95 @@ html,
   height: 100vh;
 }
 
+:root {
+  --top-menu-height: 70px;
+  /* Ajuste este valor para a altura real da sua barra superior */
+}
+
 .top-menu {
   background-color: rgba(0, 0, 0, 0.7);
-  padding: 10px 20px;
+  padding: 15px 20px;
+  /* Aumentado o padding vertical de 10px para 15px */
   display: flex;
   align-items: center;
   justify-content: space-between;
+  height: var(--top-menu-height);
+  /* Adicionada uma altura fixa */
+  z-index: 1000;
+  /* Um valor maior que o z-index da sidebar */
+}
+
+.left-section {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  /* Garante que a seção esquerda ocupe toda a altura da barra */
 }
 
 .logo {
-  width: 50px;
-  height: 50px;
-  background-color: white;
+  width: auto;
+  height: 60px;
+  /* Aumentado de 50px para 60px */
+  margin-right: 20px;
+  /* Aumentado o espaçamento à direita */
 }
 
-.top-menu h1,
-.top-menu h2 {
-  margin: 0;
-  padding: 0;
+.title-container {
+  display: flex;
+  flex-direction: column;
+  /* Empilha o nome da equipe e o título */
+  justify-content: center;
+  /* Centraliza verticalmente o conteúdo */
 }
 
-.top-menu h1 {
+.team-name {
+  color: white;
   font-size: 1.2em;
+  /* Aumentado de 0.9em para 1.2em */
+  font-weight: bold;
+  margin-bottom: 5px;
+  /* Adiciona um pequeno espaço entre o nome da equipe e o título */
 }
 
-.top-menu h2 {
+.main-title {
+  color: white;
   font-size: 1em;
-  font-weight: normal;
+  /* Aumentado de 0.9em para 1em */
+}
+
+.top-menu nav {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  /* Garante que a navegação ocupe toda a altura da barra */
 }
 
 .top-menu nav ul {
   list-style-type: none;
   padding: 0;
   display: flex;
+  align-items: center;
+  height: 100%;
 }
 
 .top-menu nav li {
-  margin: 0 10px;
+  margin: 0 15px;
+  /* Aumentado o espaçamento entre os itens do menu */
 }
 
 .top-menu nav a {
   color: white;
   text-decoration: none;
+  font-size: 0.9em;
+  /* Aumentado de 0.8em para 0.9em */
+  text-transform: uppercase;
 }
 
 .content {
   flex: 1;
   position: relative;
   overflow: hidden;
+  height: calc(100vh - var(--top-menu-height));
 }
 
 .future-page {

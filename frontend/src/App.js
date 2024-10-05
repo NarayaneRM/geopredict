@@ -13,13 +13,18 @@ function App() {
       <Router>
         <div className="App">
           <header className="top-menu">
-            <div className="logo">LOGO</div>
-            <h1>GLOBAL CLIMATE CHANGE</h1>
+            <div className="left-section">
+              <img src="/logo.png" alt="GEOPREDICT" className="logo" />
+              <div className="title-container">
+                <span className="team-name">GEOPREDICT</span>
+                <span className="main-title">  | CLIMATE CHANGE: GHG EMISSIONS</span>
+              </div>
+            </div>
             <nav>
               <ul>
-                <li><Link to="/">VITAL SIGNS</Link></li>
-                <li><Link to="/futuro">FUTURE VITAL SIGNS</Link></li>
-                <li><Link to="/mudancas">CALCULATOR</Link></li>
+                <li><Link to="/">Global signs</Link></li>
+                <li><Link to="/futuro">Brazil signs</Link></li>
+                <li><Link to="/mudancas">Calculator</Link></li>
                 <li><Link to="/analise">EDUCATION</Link></li>
                 <li><Link to="/about">ABOUT</Link></li>
               </ul>

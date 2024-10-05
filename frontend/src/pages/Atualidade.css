@@ -1,0 +1,110 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+.atualidade-container {
+    display: flex;
+    height: calc(100vh - var(--top-menu-height));
+    width: 100%;
+    font-family: 'Arial', sans-serif;
+    position: relative;
+    overflow: hidden;
+}
+
+.atualidade-main-content {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+    /* Removido o padding */
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+    margin-left: 250px;
+    /* Adiciona margem à esquerda igual à largura do sidebar */
+}
+
+.atualidade-title {
+    position: absolute;
+    top: 10px;
+    left: 50px;
+    /* 250px (largura do sidebar) + 20px de margem */
+    margin-bottom: 10px;
+    font-size: 1.5em;
+    font-weight: 300;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #f0f0f0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    /* Garante que o título fique acima do globo */
+}
+
+.globe-container {
+    flex-grow: 1;
+    position: relative;
+    width: 100%;
+    height: calc(100% - 40px);
+    /* Reduz a altura em 40px */
+    margin-top: -40px;
+    /* Move o globo 40px para cima */
+    /* Adicionado para garantir que o globo ocupe todo o espaço disponível */
+}
+
+/* Remova qualquer estilo que defina uma altura fixa para .globe-container */
+
+@keyframes twinkle {
+    0% {
+        opacity: 0.5;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        opacity: 0.5;
+    }
+}
+
+.loading,
+.error-message,
+.data-info {
+    font-size: 0.9em;
+    margin-bottom: 10px;
+    margin-left: 40px;
+    color: #f0f0f0;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.error-message {
+    color: #ff6b6b;
+}
+
+.data-info {
+    color: #4ecdc4;
+}
+
+.starry-background {
+    position: fixed;
+    top: var(--top-menu-height);
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('//unpkg.com/three-globe/example/img/night-sky.png');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+}
+
+.starry-background::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    /* Ajuste a opacidade conforme necessário */
+    z-index: 1;
+}
+
+/* Remova as animações e outros estilos relacionados ao efeito de estrelas animadas */
