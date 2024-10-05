@@ -7,7 +7,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from flask import Flask, jsonify
-from plot3d_v1 import generate_globe_data
+from backend.us_ghg_center.plot3d_v1 import generate_globe_data
 
 app = Flask(__name__)
 
