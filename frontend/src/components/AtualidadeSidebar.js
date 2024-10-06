@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
 import './AtualidadeSidebar.css';
 
 const AtualidadeSidebar = ({
@@ -8,98 +7,79 @@ const AtualidadeSidebar = ({
     onYearChange,
     dataType,
     onDataTypeChange,
-    isPlaying,
-    onPlayToggle
+    dataInfo,
+    isLoading,
+    error,
+    countries,
+    selectedCountry,
+    onCountryChange,
 }) => {
-    const [currentYear, setCurrentYear] = useState(selectedYear);
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredCountries, setFilteredCountries] = useState([]);
 
     useEffect(() => {
-        setCurrentYear(selectedYear);
-    }, [selectedYear]);
+        if (searchTerm) {
+            const filtered = countries.filter(country => 
+                country.toLowerCase().includes(searchTerm.toLowerCase())
+            );
+            setFilteredCountries(filtered);
+        } else {
+            setFilteredCountries([]);
+        }
+    }, [searchTerm, countries]);
 
-    const handleYearChange = (selectedOption) => {
-        const year = selectedOption.value;
-        setCurrentYear(year);
-        onYearChange(year);
+    const handleSearchChange = (e) => {
+        setSearchTerm(e.target.value);
     };
 
-    const handlePlayToggle = () => {
-        onPlayToggle(!isPlaying);
-    };
-
-    const yearOptions = availableYears.map(year => ({ value: year, label: year }));
-    const dataTypeOptions = [
-        { value: 'natural', label: 'Emissões Naturais' },
-        { value: 'anthropogenic', label: 'Emissões Antropogênicas' }
-    ];
-
-    const customStyles = {
-        control: (provided) => ({
-            ...provided,
-            backgroundColor: 'rgba(30, 30, 30, 0.9)',
-            borderColor: 'rgba(255, 255, 255, 0.2)',
-            color: '#fff',
-        }),
-        menu: (provided) => ({
-            ...provided,
-            backgroundColor: 'rgba(30, 30, 30, 0.9)',
-        }),
-        option: (provided, state) => ({
-            ...provided,
-            backgroundColor: state.isFocused ? 'rgba(60, 60, 60, 0.9)' : 'rgba(30, 30, 30, 0.9)',
-            color: '#fff',
-        }),
-        singleValue: (provided) => ({
-            ...provided,
-            color: '#fff',
-        }),
-        // Adicionando estilos para a barra de rolagem
-        menuList: (provided) => ({
-            ...provided,
-            '::-webkit-scrollbar': {
-                width: '8px',
-            },
-            '::-webkit-scrollbar-track': {
-                background: 'rgba(0, 0, 0, 0.1)',
-            },
-            '::-webkit-scrollbar-thumb': {
-                background: 'rgba(255, 255, 255, 0.3)',
-                borderRadius: '4px',
-            },
-            '::-webkit-scrollbar-thumb:hover': {
-                background: 'rgba(255, 255, 255, 0.5)',
-            },
-        }),
+    const handleCountrySelect = (country) => {
+        onCountryChange(country);
+        setSearchTerm('');
     };
 
     return (
         <div className="atualidade-sidebar">
-            <h2>Configurações</h2>
+            <h2>Controles</h2>
             <div className="sidebar-section">
-                <label htmlFor="year-select">Ano:</label>
-                <Select
-                    id="year-select"
-                    options={yearOptions}
-                    value={{ value: currentYear, label: currentYear }}
-                    onChange={handleYearChange}
-                    isDisabled={isPlaying}
-                    styles={customStyles}
-                />
+                <label>Ano:</label>
+                <select value={selectedYear} onChange={(e) => onYearChange(e.target.value)}>
+                    {availableYears.map((year) => (
+                        <option key={year} value={year}>{year}</option>
+                    ))}
+                </select>
             </div>
             <div className="sidebar-section">
-                <label htmlFor="data-type-select">Tipo de Dados:</label>
-                <Select
-                    id="data-type-select"
-                    options={dataTypeOptions}
-                    value={dataTypeOptions.find(option => option.value === dataType)}
-                    onChange={(selectedOption) => onDataTypeChange(selectedOption.value)}
-                    styles={customStyles}
-                />
+                <label>Tipo de Dados:</label>
+                <select value={dataType} onChange={(e) => onDataTypeChange(e.target.value)}>
+                    <option value="natural">Natural</option>
+                    <option value="anthropogenic">Antropogênico</option>
+                </select>
             </div>
             <div className="sidebar-section">
-                <button onClick={handlePlayToggle}>
-                    {isPlaying ? 'Pausar' : 'Reproduzir'}
-                </button>
+                <label>País:</label>
+                <input
+                    type="text"
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                    placeholder="Buscar país..."
+                />
+                {filteredCountries.length > 0 && (
+                    <ul className="country-list">
+                        {filteredCountries.map((country) => (
+                            <li key={country} onClick={() => handleCountrySelect(country)}>
+                                {country}
+                            </li>
+                        ))}
+                    </ul>
+                )}
+                {selectedCountry && (
+                    <p>País selecionado: {selectedCountry}</p>
+                )}
+            </div>
+            <div className="sidebar-section">
+                <p>{dataInfo}</p>
+                {isLoading && <p>Carregando...</p>}
+                {error && <p className="error">{error}</p>}
             </div>
         </div>
     );

@@ -206,7 +206,8 @@
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
-    height: 60%;  /* Ajuste este valor para controlar o comprimento da barra */
+    height: 60%;
+    /* Ajuste este valor para controlar o comprimento da barra */
     display: flex;
     flex-direction: row;
     align-items: center;

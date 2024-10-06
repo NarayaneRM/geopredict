@@ -1,0 +1,9 @@
+# Ignorar arquivos .tif
+*.tif
+backend/us_ghg_center/data/processed_tiffs_*
+
+# Ignorar a pasta node_modules no frontend
+frontend/node_modules/
+
+# Ignorar a pasta venv no backend
+backend/venv/

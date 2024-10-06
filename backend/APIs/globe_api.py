@@ -11,19 +11,27 @@ import hashlib
 
 globe_api = Blueprint('globe_api', __name__)
 
-TIF_FOLDER = "./us_ghg_center/data/processed_tiffs_natural_micasa"
-JSON_FOLDER = "./us_ghg_center/data/preprocessed_globe_data"
+TIF_FOLDER_NATURAL = "./us_ghg_center/data/processed_tiffs_natural_micasa"
+TIF_FOLDER_ANTHROPOGENIC = "./us_ghg_center/data/processed_tiffs_antropogenic_odiac"
+JSON_FOLDER_NATURAL = "./us_ghg_center/data/preprocessed_globe_data_natural"
+JSON_FOLDER_ANTHROPOGENIC = "./us_ghg_center/data/preprocessed_globe_data_anthropogenic"
 
 # Ensure JSON files are generated only once when the server starts
-if not check_json_files(TIF_FOLDER, JSON_FOLDER):
-    print("JSON files are missing or outdated. Generating new JSON files...")
-    process_all_tifs(TIF_FOLDER, JSON_FOLDER)
+if not check_json_files(TIF_FOLDER_NATURAL, JSON_FOLDER_NATURAL):
+    print("Natural JSON files are missing or outdated. Generating new JSON files...")
+    process_all_tifs(TIF_FOLDER_NATURAL, JSON_FOLDER_NATURAL)
 else:
-    print("All JSON files are up to date.")
+    print("All natural JSON files are up to date.")
 
-# Cache available years
-AVAILABLE_YEARS = get_available_years(JSON_FOLDER)
+if not check_json_files(TIF_FOLDER_ANTHROPOGENIC, JSON_FOLDER_ANTHROPOGENIC):
+    print("Anthropogenic JSON files are missing or outdated. Generating new JSON files...")
+    process_all_tifs(TIF_FOLDER_ANTHROPOGENIC, JSON_FOLDER_ANTHROPOGENIC)
+else:
+    print("All anthropogenic JSON files are up to date.")
 
+# Cache available years for both types
+AVAILABLE_YEARS_NATURAL = get_available_years(JSON_FOLDER_NATURAL)
+AVAILABLE_YEARS_ANTHROPOGENIC = get_available_years(JSON_FOLDER_ANTHROPOGENIC)
 
 def calculate_json_hash(json_path):
     with open(json_path, 'rb') as f:
@@ -33,7 +41,7 @@ def calculate_json_hash(json_path):
 @globe_api.route('/api/process_data', methods=['POST'])
 def process_data():
     try:
-        process_all_tifs(TIF_FOLDER, JSON_FOLDER)
+        process_all_tifs(TIF_FOLDER_NATURAL, JSON_FOLDER_NATURAL)
         return jsonify({"message": "All TIF files processed successfully"}), 200
     except Exception as e:
         return jsonify({"error": f"Error processing TIF files: {str(e)}"}), 500
@@ -41,23 +49,30 @@ def process_data():
 
 @globe_api.route('/api/available_years')
 def available_years():
-    return jsonify(AVAILABLE_YEARS)
+    data_type = request.args.get('type', 'natural')
+    if data_type == 'anthropogenic':
+        return jsonify(AVAILABLE_YEARS_ANTHROPOGENIC)
+    else:
+        return jsonify(AVAILABLE_YEARS_NATURAL)
 
 
 @globe_api.route('/api/globe_data')
 def get_globe_data_api():
     year = request.args.get('year')
-    # Default to December if month not provided
     month = request.args.get('month', '12')
+    data_type = request.args.get('type', 'natural')
+    
     if not year:
         return jsonify({"error": "Year parameter is required"}), 400
 
-    json_path = os.path.join(JSON_FOLDER, f"globe_data_{year}_{month}.json")
+    json_folder = JSON_FOLDER_ANTHROPOGENIC if data_type == 'anthropogenic' else JSON_FOLDER_NATURAL
+    json_path = os.path.join(json_folder, f"globe_data_{year}_{month}.json")
+    
     try:
         data = get_globe_data(json_path)
         return jsonify(data)
     except FileNotFoundError:
-        return jsonify({"error": f"Data for year {year} and month {month} not found"}), 404
+        return jsonify({"error": f"Data for year {year}, month {month}, and type {data_type} not found"}), 404
     except Exception as e:
         return jsonify({"error": f"Error reading data: {str(e)}"}), 500
 

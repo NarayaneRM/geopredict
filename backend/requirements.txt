@@ -21,3 +21,4 @@ geopandas==1.0.1
 datashader==0.16.3
 colorcet==3.1.0
 dash==2.18.1
+reverse_geocoder==1.5.1

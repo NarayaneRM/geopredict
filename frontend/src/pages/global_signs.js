@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Globe from 'react-globe.gl';
-import AtualidadeSidebar from '../components/AtualidadeSidebar';
+import GlobalSingsSidebar from '../components/global_signs_sidebar';
 import * as d3 from 'd3';
 import { interpolateRdBu } from 'd3-scale-chromatic';
 import './global_signs.css';
+import countries from 'i18n-iso-countries';
+
+// Importe os dados de localização em português
+countries.registerLocale(require("i18n-iso-countries/langs/pt.json"));
 
 const Atualidade = () => {
     const [globeData, setGlobeData] = useState(null);
@@ -18,6 +22,10 @@ const Atualidade = () => {
     const playIntervalRef = useRef(null);
     const cachedDataRef = useRef({});
     const [sliderValue, setSliderValue] = useState(0);
+    const [countries, setCountries] = useState([]);
+    const [selectedCountry, setSelectedCountry] = useState(null);
+    const [countryEmissions, setCountryEmissions] = useState({});
+    const [isCountryDataLoading, setIsCountryDataLoading] = useState(false);
 
     const loadAvailableYears = useCallback(() => {
         setIsLoading(true);
@@ -104,10 +112,12 @@ const Atualidade = () => {
 
     const handleYearChange = (year) => {
         setSelectedYear(year);
+        setSelectedCountry(null);
     };
 
     const handleDataTypeChange = (type) => {
         setDataType(type);
+        setSelectedCountry(null);
         cachedDataRef.current = {}; // Clear cache when data type changes
     };
 
@@ -205,18 +215,58 @@ const Atualidade = () => {
         console.log('Globe data updated:', globeData);
     }, [globeData]);
 
+    const loadCountryData = useCallback(() => {
+        setIsCountryDataLoading(true);
+        fetch(`/api/country_totals?year=${selectedYear}&type=${dataType}`)
+            .then(response => response.json())
+            .then(data => {
+                const countryList = Object.keys(data.country_totals)
+                    .map(code => ({
+                        code: code,
+                        name: countries.getName(code, "pt") || code
+                    }))
+                    .sort((a, b) => a.name.localeCompare(b.name, 'pt')); // Ordena alfabeticamente pelo nome em português
+
+                setCountries(countryList);
+                setCountryEmissions(data.country_totals);
+                setIsCountryDataLoading(false);
+            })
+            .catch(error => {
+                console.error('Error loading country data:', error);
+                setError('Failed to load country data: ' + error.message);
+                setIsCountryDataLoading(false);
+            });
+    }, [selectedYear, dataType]);
+
+    useEffect(() => {
+        if (selectedYear && dataType) {
+            loadCountryData();
+        }
+    }, [loadCountryData, selectedYear, dataType]);
+
+    const handleCountryChange = (country) => {
+        setSelectedCountry(country);
+    };
+
     return (
         <div className="atualidade-container">
             <div className="starry-background"></div>
-            <AtualidadeSidebar
+            <GlobalSingsSidebar
                 availableYears={availableYears}
                 selectedYear={selectedYear}
                 onYearChange={handleYearChange}
                 dataType={dataType}
                 onDataTypeChange={handleDataTypeChange}
+                isPlaying={isPlaying}
+                onPlayToggle={handlePlayToggle}
+                countries={countries}
+                selectedCountry={selectedCountry}
+                onCountryChange={handleCountryChange}
+                countryEmissions={countryEmissions}
                 dataInfo={dataInfo}
                 isLoading={isLoading}
                 error={error}
+                isCountryDataLoading={isCountryDataLoading}
             />
             <div className="atualidade-main-content">
                 <h1 className="atualidade-title">Atualidade</h1>
