@@ -20,3 +20,4 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GEOPREDICT_437815 }}
           channelId: live
           projectId: geopredict-437815
+          entryPoint: frontend/src  # Define o caminho correto do firebase.json
