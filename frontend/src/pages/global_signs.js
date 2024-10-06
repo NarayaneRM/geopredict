@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Globe from 'react-globe.gl';
 import AtualidadeSidebar from '../components/AtualidadeSidebar';
-import ColorLegend from '../components/ColorLegend';
 import * as d3 from 'd3';
-import './global_signs.css'; 
+import { interpolateRdBu } from 'd3-scale-chromatic';
+import './global_signs.css';
 
 const Atualidade = () => {
     const [globeData, setGlobeData] = useState(null);
@@ -16,10 +16,12 @@ const Atualidade = () => {
     const [isPlaying, setIsPlaying] = useState(false);
     const globeEl = useRef();
     const playIntervalRef = useRef(null);
+    const cachedDataRef = useRef({});
+    const [sliderValue, setSliderValue] = useState(0);
 
     const loadAvailableYears = useCallback(() => {
         setIsLoading(true);
-        fetch('/api/available_years')
+        fetch(`/api/available_years?type=${dataType}`)
             .then(response => response.json())
             .then(years => {
                 console.log('Available years:', years);
@@ -27,40 +29,56 @@ const Atualidade = () => {
                 if (years.length > 0 && !selectedYear) {
                     setSelectedYear(years[0]);
                 }
+                // Pré-carregar dados para todos os anos
+                years.forEach(year => loadGlobeData(year, true));
             })
             .catch(error => {
                 console.error('Error loading available years:', error);
                 setError('Failed to load available years: ' + error.message);
             })
             .finally(() => setIsLoading(false));
-    }, [selectedYear]);
+    }, [dataType, selectedYear]);
 
-    const loadGlobeData = useCallback((year) => {
+    const loadGlobeData = useCallback((year, preload = false) => {
         if (!year) return;
 
-        setIsLoading(true);
-        console.log(`Fetching data for year: ${year}`);
+        if (cachedDataRef.current[year]) {
+            if (!preload) {
+                setGlobeData(cachedDataRef.current[year]);
+                setDataInfo(`Dados carregados para ${year}: ${cachedDataRef.current[year].length} pontos`);
+            }
+            return;
+        }
+
+        if (!preload) setIsLoading(true);
+        console.log(`Fetching data for year: ${year}, type: ${dataType}`);
         fetch(`/api/globe_data?year=${year}&type=${dataType}`)
             .then(response => response.json())
             .then(data => {
-                console.log(`Loaded data for year ${year}:`, data);
-                setGlobeData(data);
-                setDataInfo(`Dados carregados para ${year}: ${data.length} pontos`);
-                setError(null);
+                const globeData = Array.isArray(data) ? data : (data.data || []);
+                console.log(`Loaded data for year ${year}:`, globeData);
+                cachedDataRef.current[year] = globeData;
+                if (!preload) {
+                    setGlobeData(globeData);
+                    setDataInfo(`Dados carregados para ${year}: ${globeData.length} pontos`);
+                    setError(null);
+                }
             })
             .catch(error => {
                 console.error('Error loading globe data:', error);
-                setError('Failed to load globe data: ' + error.message);
-                setGlobeData(null);
+                if (!preload) {
+                    setError('Failed to load globe data: ' + error.message);
+                    setGlobeData(null);
+                }
             })
             .finally(() => {
-                setIsLoading(false);
+                if (!preload) setIsLoading(false);
             });
     }, [dataType]);
 
     useEffect(() => {
         loadAvailableYears();
-    }, [loadAvailableYears]);
+    }, [loadAvailableYears, dataType]);
 
     useEffect(() => {
         if (selectedYear) {
@@ -71,10 +89,10 @@ const Atualidade = () => {
     useEffect(() => {
         if (isPlaying) {
             playIntervalRef.current = setInterval(() => {
-                setSelectedYear(prevYear => {
-                    const currentIndex = availableYears.indexOf(prevYear);
-                    const nextIndex = (currentIndex + 1) % availableYears.length;
-                    return availableYears[nextIndex];
+                setSliderValue(prevValue => {
+                    const nextValue = (prevValue + 1) % availableYears.length;
+                    setSelectedYear(availableYears[nextValue]);
+                    return nextValue;
                 });
             }, 2000); // Change year every 2 seconds
         } else {
@@ -90,10 +108,17 @@ const Atualidade = () => {
 
     const handleDataTypeChange = (type) => {
         setDataType(type);
+        cachedDataRef.current = {}; // Clear cache when data type changes
     };
 
-    const handlePlayToggle = (play) => {
-        setIsPlaying(play);
+    const handlePlayToggle = () => {
+        setIsPlaying(!isPlaying);
+    };
+
+    const handleSliderChange = (event) => {
+        const index = parseInt(event.target.value, 10);
+        setSliderValue(index);
+        setSelectedYear(availableYears[index]);
     };
 
     const { colorScale, minValue, maxValue } = useMemo(() => {
@@ -102,7 +127,7 @@ const Atualidade = () => {
         }
         const maxVal = Math.max(...globeData.map(d => d.value));
         const minVal = Math.min(...globeData.map(d => d.value));
-        const colorScl = d3.scaleSequential(d3.interpolateYlOrRd)
+        const colorScl = d3.scaleSequential(t => interpolateRdBu(1 - t))
             .domain([minVal, maxVal]);
         return { colorScale: colorScl, minValue: minVal, maxValue: maxVal };
     }, [globeData]);
@@ -118,12 +143,13 @@ const Atualidade = () => {
                 ref={globeEl}
                 width="100%"
                 height="100%"
+                globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
                 pointsData={globeData}
                 pointLat="lat"
                 pointLng="lon"
                 pointColor={d => colorScale(d.value)}
                 pointAltitude={0.01}
-                pointRadius={0.5}
+                pointRadius={0.25}
                 atmosphereColor="lightskyblue"
                 atmosphereAltitude={0.25}
                 backgroundColor="rgba(0,0,0,0)"
@@ -131,6 +157,37 @@ const Atualidade = () => {
                 cameraRotateSpeed={0.5}
                 onGlobeReady={centerOnBrazil}
             />
+        );
+    };
+
+    const renderSlider = () => {
+        return (
+            <div className="slider-container">
+                <div className="slider-play-container">
+                    <button onClick={handlePlayToggle} className="play-button">
+                        {isPlaying ? '⏹' : '▶'}
+                    </button>
+                    <input
+                        type="range"
+                        min="0"
+                        max={availableYears.length - 1}
+                        value={sliderValue}
+                        onChange={handleSliderChange}
+                        className="year-slider"
+                    />
+                </div>
+                <div className="slider-labels">
+                    {availableYears.map((year, index) => (
+                        <span
+                            key={year}
+                            className={`slider-label ${index === sliderValue ? 'active' : ''}`}
+                            style={{ left: `${(index / (availableYears.length - 1)) * 100}%` }}
+                        >
+                            {year}
+                        </span>
+                    ))}
+                </div>
+            </div>
         );
     };
 
@@ -144,6 +201,10 @@ const Atualidade = () => {
         centerOnBrazil();
     }, [centerOnBrazil]);
 
+    useEffect(() => {
+        console.log('Globe data updated:', globeData);
+    }, [globeData]);
+
     return (
         <div className="atualidade-container">
             <div className="starry-background"></div>
@@ -153,8 +214,6 @@ const Atualidade = () => {
                 onYearChange={handleYearChange}
                 dataType={dataType}
                 onDataTypeChange={handleDataTypeChange}
-                isPlaying={isPlaying}
-                onPlayToggle={handlePlayToggle}
                 dataInfo={dataInfo}
                 isLoading={isLoading}
                 error={error}
@@ -164,12 +223,18 @@ const Atualidade = () => {
                 <div className="globe-container">
                     {renderGlobe()}
                     {colorScale && minValue !== null && maxValue !== null && (
-                        <ColorLegend
-                            minValue={minValue}
-                            maxValue={maxValue}
-                            colorScale={colorScale}
-                        />
+                        <div className="color-legend">
+                            <div className="color-bar"></div>
+                            <div className="color-labels">
+                                <span>{d3.format(".2f")(maxValue)}</span>
+                                <span>{d3.format(".2f")((3 * maxValue + minValue) / 4)}</span>
+                                <span>{d3.format(".2f")((maxValue + minValue) / 2)}</span>
+                                <span>{d3.format(".2f")((maxValue + 3 * minValue) / 4)}</span>
+                                <span>{d3.format(".2f")(minValue)}</span>
+                            </div>
+                        </div>
                     )}
+                    {renderSlider()}
                 </div>
             </div>
         </div>

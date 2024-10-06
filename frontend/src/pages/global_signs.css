@@ -108,3 +108,129 @@
 }
 
 /* Remova as animações e outros estilos relacionados ao efeito de estrelas animadas */
+
+.slider-container {
+    position: absolute;
+    bottom: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80%;
+    text-align: center;
+}
+
+.slider-play-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+.play-button {
+    background-color: rgba(0, 123, 255, 0.2);
+    /* Azul com transparência */
+    color: #007bff;
+    border: none;
+    padding: 10px 15px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-right: 10px;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.play-button:hover {
+    background-color: rgba(0, 123, 255, 0.3);
+    /* Azul mais escuro com transparência */
+}
+
+.year-slider {
+    width: calc(100% - 60px);
+    /* Adjust width to accommodate play button */
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.2);
+    outline: none;
+    opacity: 0.7;
+    transition: opacity .2s;
+    border-radius: 5px;
+}
+
+.year-slider:hover {
+    opacity: 1;
+}
+
+.year-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 25px;
+    height: 25px;
+    background: #007bff;
+    /* Mudado de #4CAF50 para azul */
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.year-slider::-moz-range-thumb {
+    width: 25px;
+    height: 25px;
+    background: #007bff;
+    /* Mudado de #4CAF50 para azul */
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.slider-labels {
+    position: relative;
+    width: 95%;
+    height: 20px;
+    margin-left: 80px;
+    margin-top: 10px;
+}
+
+.slider-label {
+    position: absolute;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: white;
+}
+
+.slider-label.active {
+    font-weight: bold;
+    color: #007bff;
+    /* Mudado de #4CAF50 para azul */
+}
+
+/* Adicione estes estilos ao final do arquivo */
+
+.color-legend {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 60%;  /* Ajuste este valor para controlar o comprimento da barra */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.color-bar {
+    width: 20px;
+    height: 100%;
+    background: linear-gradient(to top, blue, white, red);
+    margin-right: 10px;
+}
+
+.color-labels {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+    font-size: 12px;
+    color: white;
+}
+
+.color-labels span {
+    text-align: left;
+}

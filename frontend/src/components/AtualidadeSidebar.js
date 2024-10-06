@@ -9,10 +9,7 @@ const AtualidadeSidebar = ({
     dataType,
     onDataTypeChange,
     isPlaying,
-    onPlayToggle,
-    dataInfo,
-    isLoading,
-    error
+    onPlayToggle
 }) => {
     const [currentYear, setCurrentYear] = useState(selectedYear);
 
@@ -104,9 +101,6 @@ const AtualidadeSidebar = ({
                     {isPlaying ? 'Pausar' : 'Reproduzir'}
                 </button>
             </div>
-            {isLoading && <div className="loading">Carregando...</div>}
-            {error && <div className="error-message">{error}</div>}
-            {dataInfo && <div className="data-info">{dataInfo}</div>}
         </div>
     );
 };

@@ -1,0 +1,14 @@
+.color-legend {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.color-legend text {
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+}
