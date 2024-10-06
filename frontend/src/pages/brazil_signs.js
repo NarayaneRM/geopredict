@@ -28,13 +28,13 @@ const BrazilFireMap = () => {
 
         window.addEventListener('resize', handleResize);
         return () => window.removeEventListener('resize', handleResize);
-    }, []);
+    }, [fetchFireData]);
 
     useEffect(() => {
         if (data.length > 0) {
             updateMap();
         }
-    }, [year, month, data]);
+    }, [year, month, data, updateMap]);
 
     const fetchFireData = () => {
         fetch('http://127.0.0.1:5000/api/fire_data')

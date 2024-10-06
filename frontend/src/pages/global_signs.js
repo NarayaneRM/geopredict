@@ -32,20 +32,15 @@ const Atualidade = () => {
         fetch(`/api/available_years?type=${dataType}`)
             .then(response => response.json())
             .then(years => {
-                console.log('Available years:', years);
                 setAvailableYears(years);
                 if (years.length > 0 && !selectedYear) {
                     setSelectedYear(years[0]);
                 }
-                // Pré-carregar dados para todos os anos
-                years.forEach(year => loadGlobeData(year, true));
-            })
-            .catch(error => {
-                console.error('Error loading available years:', error);
-                setError('Failed to load available years: ' + error.message);
+                years.forEach(year => loadGlobeData(year, true));  // Chama loadGlobeData
             })
             .finally(() => setIsLoading(false));
-    }, [dataType, selectedYear]);
+    }, [dataType, selectedYear, loadGlobeData]);  // Adicionar loadGlobeData como dependência
+
 
     const loadGlobeData = useCallback((year, preload = false) => {
         if (!year) return;
