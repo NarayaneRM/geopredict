@@ -19,9 +19,11 @@ import GrassIcon from '@mui/icons-material/GrassOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import Sidebar from '../components/Sidebar';
+import UnityAnimation from '../components/UnityAnimation';
+import './predicition.css';
 
 const Futuro = () => {
-    const [globeData, setGlobeData] = useState([]);
+    const [globeData] = useState([]); // Remove setGlobeData if it's not used
     const [globeSize, setGlobeSize] = useState({ width: 100, height: 100 });
     const [parameters, setParameters] = useState({
         transport: {
@@ -184,6 +186,9 @@ const Futuro = () => {
                             atmosphereAltitude={0.15}
                             animateIn={true}
                         />
+                    </div>
+                    <div className="unity-animation-container">
+                        <UnityAnimation />
                     </div>
                     <div className="bottom-bar">
                         <div className="lever-container">

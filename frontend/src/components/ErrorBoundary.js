@@ -1,4 +1,5 @@
 import React from 'react';
+import './ErrorBoundary.css';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -11,12 +12,21 @@ class ErrorBoundary extends React.Component {
     }
 
     componentDidCatch(error, errorInfo) {
-        console.log('Erro capturado:', error, errorInfo);
+        console.log('Error caught:', error, errorInfo);
     }
 
     render() {
         if (this.state.hasError) {
-            return <h1>Algo deu errado. Por favor, recarregue a página.</h1>;
+            return (
+                <div className="error-page">
+                    <div className="error-content">
+                        <img src="/logo.png" alt="GEOPREDICT" className="error-logo" />
+                        <h1>Houston, we have a problem!</h1>
+                        <p>It seems our spacecraft has encountered some unexpected space debris.</p>
+                        <p>Shall we attempt a <button onClick={() => window.location.reload()}>relaunch</button>?</p>
+                    </div>
+                </div>
+            );
         }
 
         return this.props.children;

@@ -3,11 +3,28 @@ import Globe from 'react-globe.gl';
 import GlobalSingsSidebar from '../components/global_signs_sidebar';
 import * as d3 from 'd3';
 import { interpolateRdBu } from 'd3-scale-chromatic';
+import countriesLib from 'i18n-iso-countries';
+import ptLocale from "i18n-iso-countries/langs/pt.json";
 import './global_signs.css';
-import countries from 'i18n-iso-countries';
 
-// Importe os dados de localização em português
-countries.registerLocale(require("i18n-iso-countries/langs/pt.json"));
+// Função para importar dados dinamicamente
+function importAll(r) {
+  let files = {};
+  r.keys().forEach((key) => {
+    const year = key.match(/\d{4}/)[0];
+    files[year] = r(key);
+  });
+  return files;
+}
+
+// Importar todos os arquivos JSON de dados antropogênicos
+const anthropogenicData = importAll(require.context('../data/us_ghg_center/preprocessed_globe_data_anthropogenic', true, /globe_data_\d{4}_12\.json$/));
+
+// Importar todos os arquivos JSON de dados naturais
+const naturalData = importAll(require.context('../data/us_ghg_center/preprocessed_globe_data_natural', true, /globe_data_\d{4}_12\.json$/));
+
+// Registre os dados de localização em português
+countriesLib.registerLocale(ptLocale);
 
 const Atualidade = () => {
     const [globeData, setGlobeData] = useState(null);
@@ -22,62 +39,46 @@ const Atualidade = () => {
     const playIntervalRef = useRef(null);
     const cachedDataRef = useRef({});
     const [sliderValue, setSliderValue] = useState(0);
-    const [countries, setCountries] = useState([]);
+    const [countriesList, setCountriesList] = useState([]);
     const [selectedCountry, setSelectedCountry] = useState(null);
     const [countryEmissions, setCountryEmissions] = useState({});
     const [isCountryDataLoading, setIsCountryDataLoading] = useState(false);
 
-    const loadAvailableYears = useCallback(() => {
-        setIsLoading(true);
-        fetch(`/api/available_years?type=${dataType}`)
-            .then(response => response.json())
-            .then(years => {
-                setAvailableYears(years);
-                if (years.length > 0 && !selectedYear) {
-                    setSelectedYear(years[0]);
-                }
-                years.forEach(year => loadGlobeData(year, true));  // Chama loadGlobeData
-            })
-            .finally(() => setIsLoading(false));
-    }, [dataType, selectedYear, loadGlobeData]);  // Adicionar loadGlobeData como dependência
+    // Modifique o objeto allData para usar os dados importados dinamicamente
+    const allData = useMemo(() => ({
+        anthropogenic: anthropogenicData,
+        natural: naturalData
+    }), []);
 
-
+    // Modifique a função loadGlobeData para usar os dados locais
     const loadGlobeData = useCallback((year, preload = false) => {
         if (!year) return;
 
-        if (cachedDataRef.current[year]) {
+        const data = allData[dataType][year];
+        if (data) {
             if (!preload) {
-                setGlobeData(cachedDataRef.current[year]);
-                setDataInfo(`Dados carregados para ${year}: ${cachedDataRef.current[year].length} pontos`);
+                setGlobeData(data);
+                setDataInfo(`Dados carregados para ${year}: ${data.length} pontos`);
+                setError(null);
             }
-            return;
+        } else {
+            if (!preload) {
+                setError(`Dados não disponíveis para o ano ${year}`);
+                setGlobeData(null);
+            }
         }
+        setIsLoading(false);
+    }, [dataType, allData]);
 
-        if (!preload) setIsLoading(true);
-        console.log(`Fetching data for year: ${year}, type: ${dataType}`);
-        fetch(`/api/globe_data?year=${year}&type=${dataType}`)
-            .then(response => response.json())
-            .then(data => {
-                const globeData = Array.isArray(data) ? data : (data.data || []);
-                console.log(`Loaded data for year ${year}:`, globeData);
-                cachedDataRef.current[year] = globeData;
-                if (!preload) {
-                    setGlobeData(globeData);
-                    setDataInfo(`Dados carregados para ${year}: ${globeData.length} pontos`);
-                    setError(null);
-                }
-            })
-            .catch(error => {
-                console.error('Error loading globe data:', error);
-                if (!preload) {
-                    setError('Failed to load globe data: ' + error.message);
-                    setGlobeData(null);
-                }
-            })
-            .finally(() => {
-                if (!preload) setIsLoading(false);
-            });
-    }, [dataType]);
+    // Modifique a função loadAvailableYears para usar os dados locais
+    const loadAvailableYears = useCallback(() => {
+        const years = Object.keys(allData[dataType]).sort();
+        setAvailableYears(years);
+        if (years.length > 0 && !selectedYear) {
+            setSelectedYear(years[0]);
+        }
+        years.forEach(year => loadGlobeData(year, true));
+    }, [dataType, selectedYear, loadGlobeData, allData]);
 
     useEffect(() => {
         loadAvailableYears();
@@ -210,28 +211,33 @@ const Atualidade = () => {
         console.log('Globe data updated:', globeData);
     }, [globeData]);
 
+    // Modifique a função loadCountryData para calcular os totais localmente
     const loadCountryData = useCallback(() => {
         setIsCountryDataLoading(true);
-        fetch(`/api/country_totals?year=${selectedYear}&type=${dataType}`)
-            .then(response => response.json())
-            .then(data => {
-                const countryList = Object.keys(data.country_totals)
-                    .map(code => ({
-                        code: code,
-                        name: countries.getName(code, "pt") || code
-                    }))
-                    .sort((a, b) => a.name.localeCompare(b.name, 'pt')); // Ordena alfabeticamente pelo nome em português
+        const data = allData[dataType][selectedYear];
+        if (data) {
+            const countryTotals = data.reduce((acc, point) => {
+                if (!acc[point.country]) {
+                    acc[point.country] = 0;
+                }
+                acc[point.country] += point.value;
+                return acc;
+            }, {});
 
-                setCountries(countryList);
-                setCountryEmissions(data.country_totals);
-                setIsCountryDataLoading(false);
-            })
-            .catch(error => {
-                console.error('Error loading country data:', error);
-                setError('Failed to load country data: ' + error.message);
-                setIsCountryDataLoading(false);
-            });
-    }, [selectedYear, dataType]);
+            const countryList = Object.keys(countryTotals)
+                .map(code => ({
+                    code: code,
+                    name: countriesLib.getName(code, "pt") || code
+                }))
+                .sort((a, b) => a.name.localeCompare(b.name, 'pt'));
+
+            setCountriesList(countryList);
+            setCountryEmissions(countryTotals);
+        } else {
+            setError(`Dados não disponíveis para o ano ${selectedYear}`);
+        }
+        setIsCountryDataLoading(false);
+    }, [selectedYear, dataType, allData]);
 
     useEffect(() => {
         if (selectedYear && dataType) {
@@ -254,7 +260,7 @@ const Atualidade = () => {
                 onDataTypeChange={handleDataTypeChange}
                 isPlaying={isPlaying}
                 onPlayToggle={handlePlayToggle}
-                countries={countries}
+                countries={countriesList}
                 selectedCountry={selectedCountry}
                 onCountryChange={handleCountryChange}
                 countryEmissions={countryEmissions}

@@ -235,3 +235,15 @@
 .color-labels span {
     text-align: left;
 }
+
+.unity-container {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.unity-container iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+}
