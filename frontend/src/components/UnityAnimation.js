@@ -1,29 +1,45 @@
 import React, { useEffect, useRef } from 'react';
 
-const UnityAnimation = () => {
-    const iframeRef = useRef(null);
+function UnityAnimation() {
+    const canvasRef = useRef(null);
 
     useEffect(() => {
-        const loadUnity = () => {
-            if (iframeRef.current) {
-                iframeRef.current.src = '/game/index.html';
-            }
+        const script = document.createElement('script');
+        script.src = "/game/Build/GameSpaceApps.loader.js";
+        script.async = true;
+        document.body.appendChild(script);
+
+        script.onload = () => {
+            window.createUnityInstance(canvasRef.current, {
+                dataUrl: "/game/Build/webgl.data",
+                frameworkUrl: "/game/Build/build.framework.js",
+                codeUrl: "/game/Build/build.wasm",
+                streamingAssetsUrl: "/game/StreamingAssets",
+                companyName: "GeoPredict",
+                productName: "EduEco",
+                productVersion: "0.1",
+                webglContextAttributes: {alpha: true, preserveDrawingBuffer: true},
+                backgroundColor: 'transparent',
+                backgroundAlpha: 0
+            });
         };
 
-        loadUnity();
+        return () => {
+            document.body.removeChild(script);
+        };
     }, []);
 
     return (
-        <div className="unity-container">
-            <iframe
-                ref={iframeRef}
-                title="Unity Animation"
-                width="100%"
-                height="100%"
-                frameBorder="0"
-            />
-        </div>
+        <canvas 
+            ref={canvasRef} 
+            id="unity-canvas" 
+            style={{
+                width: '100%', 
+                height: '100%', 
+                background: 'transparent'
+            }}
+        />
     );
-};
+}
 
 export default UnityAnimation;

@@ -114,7 +114,7 @@ const GlobalSingsSidebar = ({
                     onChange={handleCountrySelect}
                     styles={customStyles}
                     isClearable
-                    placeholder="Selecione um país..."
+                    placeholder="Choose a country..."
                 />
                 {selectedCountry && !isCountryDataLoading && countryEmissions[selectedCountry] && (
                     <p className="country-emissions">

@@ -1,14 +1,273 @@
-.unity-animation-container {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 400px;
-  height: 300px;
-  z-index: 10;
+.future-page {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Previne scrollbars indesejadas */
 }
 
+.top-bar {
+  height: 60px;
+  /* Ajuste conforme necessário */
+  width: 100%;
+  z-index: 1000;
+  /* Adicione outros estilos para a top bar conforme necessário */
+}
+
+.visualization-container {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+  transition: width 0.3s ease;
+  width: 100%;
+}
+
+.visualization-container.sidebar-open {
+  width: 100%; /* Removido o cálculo, pois já está dentro do main-content ajustado */
+}
+
+.sidebar {
+  width: 300px;
+  /* Ajuste conforme necessário */
+  height: 100%;
+  overflow-y: auto;
+}
+
+.main-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  transition: margin-left 0.3s ease, width 0.3s ease;
+  width: 100%;
+}
+
+.main-content.sidebar-open {
+  margin-left: 250px;
+  width: calc(100% - 250px);
+}
+
+.globe-container,
 .unity-container {
+  flex: 1;
   width: 100%;
   height: 100%;
+  transition: width 0.3s ease;
+}
+
+.bottom-bar {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  max-width: 1000px;
+  height: 150px;
+  /* Aumentado de 140px para 170px */
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 10px;
+  z-index: 1000;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  /* Alterado de center para flex-start */
+  padding: 10px;
   overflow: hidden;
+  /* Previne rolagem */
+  transition: left 0.3s ease, transform 0.3s ease, width 0.3s ease;
+}
+
+.bottom-bar.sidebar-open {
+  left: calc(250px + (100% - 250px) / 2);
+  width: calc(70% - 250px * 0.7);
+}
+
+/* Ajuste quando a barra lateral estiver fechada */
+.sidebar.closed~.bottom-bar {
+  left: 50%;
+  width: 70%;
+  /* Aumentado de 60% para 70% */
+}
+
+.side-buttons {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 50%;
+  padding: 3px;
+  /* Reduzido de 3px para 2px */
+  /* Reduzido de 5px para 3px */
+  margin-right: 10px;
+}
+
+.side-button {
+  padding: 6px;
+  /* Reduzido de 6px para 4px */
+  /* Reduzido de 8px para 6px */
+  background-color: #818181;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 5px;
+  /* Reduzido de 11px para 10px */
+  /* Reduzido de 12px para 11px */
+  white-space: nowrap;
+  text-align: center;
+  margin-bottom: 4px;
+  /* Reduzido de 4px para 3px */
+  /* Reduzido de 5px para 4px */
+}
+
+.side-button:hover {
+  background-color: #ffffff;
+  color: black;
+}
+
+.lever-container {
+  height: 200px;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+  overflow: hidden;
+  padding-top: 5px;
+  /* Adicionado um pequeno padding no topo */
+}
+
+.levers-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.lever-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 2px;
+  width: 35px;
+  /* Aumentado de 30px para 35px */
+  font-size: 9px !important;
+}
+
+.lever-icon {
+  font-size: 16px !important;
+  /* Aumentado de 14px para 16px */
+  color: white !important;
+  margin-bottom: 3px;
+  /* Reduzido de 2px para 1px */
+}
+
+.lever-container {
+  position: relative;
+  height: 250px;
+  /* Aumentado de 90px para 120px */
+  width: 100%;
+  margin: 0 20px;
+  display: flex;
+  justify-content: space-around;
+}
+
+.lever {
+  -webkit-appearance: none;
+  width: 14px;
+  /* Aumentado de 12px para 14px */
+  height: 70px;
+  /* Aumentado de 70px para 90px */
+  background: transparent;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity .2s;
+  margin: 0;
+  writing-mode: bt-lr;
+  -webkit-appearance: slider-vertical;
+  margin-bottom: 4px;
+  /* Aumentado de 2px para 4px */
+}
+
+.lever:hover {
+  opacity: 1;
+}
+
+.lever::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 16px;
+  /* Reduzido de 20px para 15px */
+  height: 16px;
+  /* Reduzido de 20px para 15px */
+  background: black;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.lever::-moz-range-thumb {
+  width: 16px;
+  /* Reduzido de 20px para 15px */
+  height: 16px;
+  /* Reduzido de 20px para 15px */
+  background: black;
+  cursor: pointer;
+  border-radius: 50%;
+}
+
+.lever-marks {
+  position: absolute;
+  top: 0;
+  left: 45%;
+  transform: translateX(-50%);
+  height: 70px;
+  width: 0px;
+  background-color: #d3d3d3;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+}
+
+.lever-mark {
+  width: 10px;
+  height: 2px;
+  background-color: #d3d3d36d;
+  transform: translateX(-2px);
+}
+
+.lever-value {
+  font-size: 8px;
+  /* Aumentado de 7px para 8px */
+  margin-top: 2px;
+  line-height: 1;
+}
+
+.lever-label {
+  font-size: 7px;
+  /* Aumentado de 6px para 7px */
+  text-align: center;
+  margin-top: 0px;
+  /* Aumentado de 2px para 3px */
+  line-height: 1.2;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: normal;
+  height: 10px;
+  /* Aumentado de 24px para 28px */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mantenha os estilos existentes para os outros elementos */
+
+.unity-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 190px; /* Ajuste este valor para corresponder à altura do bottom-bar */
+  overflow: hidden;
+}
+
+.unity-container iframe {
+  width: 100%;
+  height: 100%;
+  border: none;
 }

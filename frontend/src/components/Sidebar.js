@@ -40,7 +40,7 @@ const Sidebar = ({ children, isOpen, onToggle }) => {
                 }}
             >
                 <div className="sidebar-content">
-                    <h3>Filtros</h3>
+                    <h3>Graphs</h3>
                     {children}
                 </div>
             </Drawer>

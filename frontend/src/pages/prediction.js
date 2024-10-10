@@ -18,6 +18,7 @@ import ParkIcon from '@mui/icons-material/ParkOutlined';
 import GrassIcon from '@mui/icons-material/GrassOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
+import HelpOutlineIcon from '@mui/icons-material/HelpOutline';
 import Sidebar from '../components/Sidebar';
 import UnityAnimation from '../components/UnityAnimation';
 import './predicition.css';
@@ -31,11 +32,6 @@ const Future = () => {
             lightVehicles: 2,
             heavyVehicles: 2
         },
-        buildings: {
-            behaviour: 2,
-            efficiency: 2,
-            heatingSystem: 2
-        },
         industry: {
             carbonIntensity: 2,
             carbonCapture: 2,
@@ -44,8 +40,7 @@ const Future = () => {
         electricity: {
             nuclear: 2,
             wind: 2,
-            solar: 2,
-            waveAndTidal: 2
+            solar: 2
         },
         landAndWaste: {
             forestry: 2,
@@ -53,9 +48,10 @@ const Future = () => {
             waste: 2
         }
     });
-    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
     const containerEl = useRef();
     const globeEl = useRef();
+    const [showGlobe, setShowGlobe] = useState(true);
 
     useEffect(() => {
         const handleResize = () => {
@@ -120,13 +116,46 @@ const Future = () => {
         { name: 'Nuclear', value: 10 },
     ];
 
+    const toggleView = () => {
+        setShowGlobe(!showGlobe);
+    };
+
+    const resetLevels = () => {
+        setParameters({
+            transport: {
+                travelDemand: 2,
+                lightVehicles: 2,
+                heavyVehicles: 2
+            },
+            industry: {
+                carbonIntensity: 2,
+                carbonCapture: 2,
+                hydrogen: 2
+            },
+            electricity: {
+                nuclear: 2,
+                wind: 2,
+                solar: 2
+            },
+            landAndWaste: {
+                forestry: 2,
+                bioenergy: 2,
+                waste: 2
+            }
+        });
+    };
+
+    const showHelp = () => {
+        alert("Help information goes here"); // Replace with your actual help implementation
+    };
+
     return (
         <>
             <div className="space-background"></div>
             <div className="future-page">
                 <Sidebar isOpen={sidebarOpen} onToggle={() => setSidebarOpen(!sidebarOpen)}>
                     <div className="charts-container">
-                        <ResponsiveContainer width="100%" height={200}>
+                        <ResponsiveContainer width="100%" height={20}>
                             <LineChart data={temperatureData}>
                                 <XAxis dataKey="year" />
                                 <YAxis />
@@ -168,29 +197,45 @@ const Future = () => {
                         </ResponsiveContainer>
                     </div>
                 </Sidebar>
-                <div className={`main-content ${sidebarOpen ? '' : 'sidebar-closed'}`}>
-                    <div className="globe-container" ref={containerEl}>
-                        <Globe
-                            ref={globeEl}
-                            width={globeSize.width}
-                            height={globeSize.height}
-                            globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
-                            backgroundColor="rgba(0,0,0,0)"
-                            pointsData={globeData}
-                            pointAltitude="value"
-                            pointColor="color"
-                            pointRadius={0.5}
-                            pointsMerge={true}
-                            globeRadius={Math.min(globeSize.width, globeSize.height) * 0.45}
-                            atmosphereColor="lightskyblue"
-                            atmosphereAltitude={0.15}
-                            animateIn={true}
-                        />
+                <div className={`main-content ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                    <div className={`visualization-container ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                        {showGlobe ? (
+                            <div className="globe-container" ref={containerEl}>
+                                <Globe
+                                    ref={globeEl}
+                                    width={globeSize.width}
+                                    height={globeSize.height}
+                                    globeImageUrl="//unpkg.com/three-globe/example/img/earth-blue-marble.jpg"
+                                    backgroundColor="rgba(0,0,0,0)"
+                                    pointsData={globeData}
+                                    pointAltitude="value"
+                                    pointColor="color"
+                                    pointRadius={0.5}
+                                    pointsMerge={true}
+                                    globeRadius={Math.min(globeSize.width, globeSize.height) * 0.45}
+                                    atmosphereColor="lightskyblue"
+                                    atmosphereAltitude={0.15}
+                                    animateIn={true}
+                                />
+                            </div>
+                        ) : (
+                            <div className="unity-container">
+                                <UnityAnimation />
+                            </div>
+                        )}
                     </div>
-                    <div className="unity-animation-container">
-                        <UnityAnimation />
-                    </div>
-                    <div className="bottom-bar">
+                    <div className={`bottom-bar ${sidebarOpen ? 'sidebar-open' : ''}`}>
+                        <div className="side-buttons">
+                            <button onClick={toggleView} className="side-button">
+                                {showGlobe ? 'Switch to City' : 'Switch to Globe'}
+                            </button>
+                            <button onClick={resetLevels} className="side-button">
+                                Reset Levels
+                            </button>
+                            <button onClick={showHelp} className="side-button">
+                                <HelpOutlineIcon />
+                            </button>
+                        </div>
                         <div className="lever-container">
                             {Object.entries(parameters).map(([category, params], index) => (
                                 <React.Fragment key={category}>
@@ -227,10 +272,6 @@ const Future = () => {
                                 </React.Fragment>
                             ))}
                         </div>
-                        <div className="button-container">
-                            <button className="results-button">Go to results</button>
-                            <button className="reset-button">Reset levers</button>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -252,7 +293,6 @@ function getIconForParam(param) {
         nuclear: <RadioactiveIcon />,
         wind: <AirIcon />,
         solar: <WbSunnyIcon />,
-        waveAndTidal: <WaterIcon />,
         forestry: <ParkIcon />,
         bioenergy: <GrassIcon />,
         waste: <DeleteIcon />
@@ -274,7 +314,6 @@ function getParamLabel(param) {
         nuclear: 'Nuclear',
         wind: 'Wind',
         solar: 'Solar',
-        waveAndTidal: 'Wave/ Tidal',
         forestry: 'Forestry',
         bioenergy: 'Bioenergy',
         waste: 'Waste'
