@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+
+.loading-page {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: radial-gradient(ellipse at bottom, #1B2735 0%, #090A0F 100%);
+    z-index: 9999; /* Isso garante que a LoadingPage fique à frente de tudo */
+}
+
+.stars,
+.twinkling {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.stars {
+    background: #000 url('http://www.script-tutorials.com/demos/360/images/stars.png') repeat top center;
+    z-index: 0;
+}
+
+.twinkling {
+    background: transparent url('http://www.script-tutorials.com/demos/360/images/twinkling.png') repeat top center;
+    z-index: 1;
+    animation: move-twink-back 200s linear infinite;
+}
+
+@keyframes move-twink-back {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: -10000px 5000px;
+    }
+}
+
+.loading-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    color: #fff;
+    font-family: 'Orbitron', sans-serif;
+}
+
+.geo_logo {
+    width: 200px;
+    /* Aumentado de 150px para 200px */
+    height: auto;
+    margin-bottom: 30px;
+}
+
+h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    letter-spacing: 5px;
+    font-weight: 700;
+}
+
+p {
+    font-size: 18px;
+    max-width: 500px;
+    /* Aumentado para acomodar mensagens mais longas */
+    margin: 0 auto 30px;
+    opacity: 0.8;
+    line-height: 1.4;
+}
+
+.loading-spinner {
+    width: 50px;
+    /* Aumentado ligeiramente */
+    height: 50px;
+    border: 3px solid rgba(255, 255, 255, .3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+    margin: 0 auto;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}

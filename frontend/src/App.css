@@ -22,13 +22,15 @@ html,
 }
 
 :root {
-  --top-menu-height: 70px;
+  --top-menu-height: 50px;
+  /* Reduzido de 60px para 50px */
   /* Ajuste este valor para a altura real da sua barra superior */
 }
 
 .top-menu {
   background-color: rgba(0, 0, 0, 0.7);
-  padding: 15px 20px;
+  padding: 5px 20px;
+  /* Reduzido o padding vertical de 10px para 5px */
   /* Aumentado o padding vertical de 10px para 15px */
   display: flex;
   align-items: center;
@@ -48,9 +50,11 @@ html,
 
 .logo {
   width: auto;
-  height: 60px;
+  height: 100px;
+  /* Reduzido de 50px para 40px */
   /* Aumentado de 50px para 60px */
-  margin-right: 20px;
+  margin-right: 15px;
+  /* Reduzido o espaçamento à direita */
   /* Aumentado o espaçamento à direita */
 }
 
@@ -64,16 +68,19 @@ html,
 
 .team-name {
   color: white;
-  font-size: 1.2em;
+  font-size: 0.9em;
+  /* Reduzido de 1em para 0.9em */
   /* Aumentado de 0.9em para 1.2em */
   font-weight: bold;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
+  /* Reduzido o espaçamento inferior */
   /* Adiciona um pequeno espaço entre o nome da equipe e o título */
 }
 
 .main-title {
   color: white;
-  font-size: 1em;
+  font-size: 0.8em;
+  /* Reduzido de 0.9em para 0.8em */
   /* Aumentado de 0.9em para 1em */
 }
 
@@ -93,14 +100,16 @@ html,
 }
 
 .top-menu nav li {
-  margin: 0 15px;
+  margin: 0 10px;
+  /* Reduzido o espaçamento entre os itens do menu */
   /* Aumentado o espaçamento entre os itens do menu */
 }
 
 .top-menu nav a {
   color: white;
   text-decoration: none;
-  font-size: 0.9em;
+  font-size: 0.75em;
+  /* Reduzido de 0.8em para 0.75em */
   /* Aumentado de 0.8em para 0.9em */
   text-transform: uppercase;
 }
@@ -126,7 +135,7 @@ html,
   background-color: rgba(0, 0, 0, 0.5);
   color: white;
   position: fixed;
-  top: 70px;
+  top: var(--top-menu-height);
   left: 0;
   bottom: 0;
   z-index: 1000;
