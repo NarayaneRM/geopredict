@@ -14,26 +14,31 @@ The GeoPredict platform leverages several geospatial and emissions-related datab
    - **Description**: This dataset provides information on natural emissions, including data from various biomes and ecosystems. MICASA focuses on emissions from natural causes, such as volcanic activity, oceanic currents, and vegetative processes.
    - **Use in GeoPredict**: Natural emissions data is visualized on the 3D globe, allowing users to filter by year and country to track emissions patterns from natural sources.
    - **Data Range**: 2001 - 2022
+   - **Link**: [MICASA Database](https://dljsq618eotzp.cloudfront.net/browseui/browseui/#micasa-carbonflux-monthgrid-v1/)
 
 ### 2. **US GHG Center: ODIAC (Open-source Data Inventory for Anthropogenic CO2)**
    - **Description**: ODIAC offers high-resolution data on CO2 emissions from human activities, including energy production, industry, and transportation sectors. This database is widely used for global-scale analysis of anthropogenic emissions.
    - **Use in GeoPredict**: The platform uses ODIAC data to model human-caused emissions, contributing to its predictive models for future emissions scenarios.
    - **Data Range**: 2001 - 2022
+   - **Link**: [ODIAC Database](https://dljsq618eotzp.cloudfront.net/browseui/browseui/#odiac-ffco2-monthgrid-v2023/)
 
 ### 3. **US GHG Center: EMIT (Emission Monitoring and Impact Tracking)**
    - **Description**: EMIT provides data on significant emission events, such as wildfires, industrial accidents, and major natural disasters. This dataset is updated in real-time, offering near-instantaneous tracking of emission spikes.
    - **Use in GeoPredict**: EMIT data is integrated into the platform’s real-time modeling, allowing users to observe how major events contribute to global GHG emissions.
    - **Data Range**: 2022
+   - **Link**: [EMIT Database](https://dljsq618eotzp.cloudfront.net/browseui/browseui/browseui/#emit-ch4plume-v1/)
 
 ### 4. **SEEG (System for Estimating Greenhouse Gas Emissions)**
    - **Description**: SEEG is a Brazilian database that focuses on GHG emissions from various sectors within the country, such as deforestation, agriculture, and energy. The platform provides data for all states in Brazil.
    - **Use in GeoPredict**: GeoPredict integrates SEEG data to focus on emissions within Brazil, especially in the Amazon region. This helps users visualize the impact of deforestation and other activities on local and global emissions.
    - **Data Range**: 1998 - 2022
+   - **Link**: [SEEG Database](https://plataforma.seeg.eco.br/)
 
 ### 5. **INPE (Brazilian National Institute for Space Research)**
    - **Description**: INPE provides real-time data on wildfire outbreaks across Brazil. This dataset includes geographic coordinates, fire intensity, and emissions from burning biomass.
    - **Use in GeoPredict**: INPE’s wildfire data is visualized alongside emissions from various Brazilian states, showing how these events contribute to overall GHG levels in the region.
    - **Data Range**: Real-time data (updated monthly)
+   - **Link**: [INPE BDQueimadas](https://terrabrasilis.dpi.inpe.br/queimadas/bdqueimadas/)
 
 
 ## 3. Features and Models
@@ -141,4 +146,4 @@ This project is licensed under the [insert license type, e.g., MIT License] - se
 ## 9. Acknowledgments
 
 - We thank the Technological Institute of Aeronautics (ITA - Brazil) for the support and resources provided.
-- Our recognition to the open-source community for the tools and libraries used in this project.
+- Our recognition to the open-source community for the tools, data and libraries used in this project.
