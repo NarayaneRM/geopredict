@@ -9,12 +9,12 @@ import './global_signs.css';
 
 // Função para importar dados dinamicamente
 function importAll(r) {
-  let files = {};
-  r.keys().forEach((key) => {
-    const year = key.match(/\d{4}/)[0];
-    files[year] = r(key);
-  });
-  return files;
+    let files = {};
+    r.keys().forEach((key) => {
+        const year = key.match(/\d{4}/)[0];
+        files[year] = r(key);
+    });
+    return files;
 }
 
 // Importar todos os arquivos JSON de dados antropogênicos
@@ -270,7 +270,7 @@ const Atualidade = () => {
                 isCountryDataLoading={isCountryDataLoading}
             />
             <div className="atualidade-main-content">
-                <h1 className="atualidade-title">Atualidade</h1>
+                <h1 className="atualidade-title">Emissions</h1>
                 <div className="globe-container">
                     {renderGlobe()}
                     {colorScale && minValue !== null && maxValue !== null && (

@@ -35,8 +35,8 @@ const GlobalSingsSidebar = ({
 
     const yearOptions = availableYears.map(year => ({ value: year, label: year }));
     const dataTypeOptions = [
-        { value: 'natural', label: 'Emissões Naturais' },
-        { value: 'anthropogenic', label: 'Emissões Antropogênicas' }
+        { value: 'natural', label: 'Natural Emissions' },
+        { value: 'anthropogenic', label: 'Anthropogenic Emissions' }
     ];
     const countryOptions = countries.map(country => ({
         value: country.code,

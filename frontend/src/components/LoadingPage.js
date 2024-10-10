@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import './LoadingPage.css';
 
 const messages = [
-    "Calculando a trajetória para Marte...",
-    "Alinhando satélites para melhor visualização do clima...",
-    "Coletando dados de emissões de toda a galáxia...",
-    "Preparando foguetes para uma viagem interplanetária sustentável...",
-    "Calibrando sensores atmosféricos em escala global...",
-    "Negociando tratados de redução de carbono com civilizações alienígenas...",
-    "Convertendo energia solar em dados climáticos...",
-    "Sincronizando relógios atômicos para medições precisas de CO2...",
-    "Ativando escudos contra tempestades solares e mudanças climáticas...",
-    "Iniciando simulação de terraformação para um futuro sustentável..."
+    "Calculating trajectory to Mars...",
+    "Aligning satellites for better climate visualization...",
+    "Collecting emission data from across the galaxy...",
+    "Preparing rockets for a sustainable interplanetary journey...",
+    "Calibrating atmospheric sensors on a global scale...",
+    "Negotiating carbon reduction treaties with alien civilizations...",
+    "Converting solar energy into climate data...",
+    "Synchronizing atomic clocks for precise CO2 measurements...",
+    "Activating shields against solar storms and climate change...",
+    "Initiating terraforming simulation for a sustainable future..."
 ];
 
 const LoadingPage = () => {

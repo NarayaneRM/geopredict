@@ -22,7 +22,7 @@ import Sidebar from '../components/Sidebar';
 import UnityAnimation from '../components/UnityAnimation';
 import './predicition.css';
 
-const Futuro = () => {
+const Future = () => {
     const [globeData] = useState([]); // Remove setGlobeData if it's not used
     const [globeSize, setGlobeSize] = useState({ width: 100, height: 100 });
     const [parameters, setParameters] = useState({
@@ -89,7 +89,7 @@ const Futuro = () => {
         }));
     };
 
-    // Dados dummy para os gráficos
+    // Dummy data for charts
     const temperatureData = [
         { year: 2020, temperature: 14.5 },
         { year: 2030, temperature: 15.1 },
@@ -115,8 +115,8 @@ const Futuro = () => {
     ];
 
     const energyMixData = [
-        { name: 'Fóssil', value: 60 },
-        { name: 'Renovável', value: 30 },
+        { name: 'Fossil', value: 60 },
+        { name: 'Renewable', value: 30 },
         { name: 'Nuclear', value: 10 },
     ];
 
@@ -133,7 +133,7 @@ const Futuro = () => {
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="temperature" stroke="#8884d8" name="Temperatura Global (°C)" />
+                                <Line type="monotone" dataKey="temperature" stroke="#8884d8" name="Global Temperature (°C)" />
                             </LineChart>
                         </ResponsiveContainer>
 
@@ -144,7 +144,7 @@ const Futuro = () => {
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <Tooltip />
                                 <Legend />
-                                <Line type="monotone" dataKey="co2" stroke="#82ca9d" name="Concentração de CO2 (ppm)" />
+                                <Line type="monotone" dataKey="co2" stroke="#82ca9d" name="CO2 Concentration (ppm)" />
                             </LineChart>
                         </ResponsiveContainer>
 
@@ -155,7 +155,7 @@ const Futuro = () => {
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="level" fill="#8884d8" name="Aumento do Nível do Mar (cm)" />
+                                <Bar dataKey="level" fill="#8884d8" name="Sea Level Rise (cm)" />
                             </BarChart>
                         </ResponsiveContainer>
 
@@ -218,7 +218,7 @@ const Futuro = () => {
                                                             <div className="lever-mark"></div>
                                                         </div>
                                                     </div>
-                                                    <span className="lever-value">Nível {value}</span>
+                                                    <span className="lever-value">Level {value}</span>
                                                     <span className="lever-label">{getParamLabel(param)}</span>
                                                 </div>
                                             ))}
@@ -282,4 +282,4 @@ function getParamLabel(param) {
     return labelMap[param] || param;
 }
 
-export default Futuro;
+export default Future;

@@ -158,8 +158,7 @@ const BrazilFireMap = () => {
             'Janeiro': 'January', 'Fevereiro': 'February', 'Março': 'March',
             'Abril': 'April', 'Maio': 'May', 'Junho': 'June',
             'Julho': 'July', 'Agosto': 'August', 'Setembro': 'September',
-            'Outubro': 'October', 'Novembro': 'November', 'Dezembro': 'December',
-            'Todos': 'All'
+            'Outubro': 'October', 'Novembro': 'November', 'Dezembro': 'December'
         };
         return months[month] || month;
     };
@@ -218,7 +217,7 @@ const BrazilFireMap = () => {
             <p>Error: {error}</p>
         </div>
     );
-    if (!mapData) return <div style={{ color: 'white' }}>Carregando mapa...</div>;
+    if (!mapData) return <div style={{ color: 'white' }}>Loading map...</div>;
 
     return (
         <div className="brazil-fire-map-container">
